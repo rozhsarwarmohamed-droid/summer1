@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>Grade 1 Mathematics Dot Pattern Flashcards</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts: Inter & Comic Neue for child-friendly but professional feel -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        child: ['Comic Neue', 'cursive'],
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        /* Smartboard & Android Tablet Scroll/Viewport Strict Overrides */
+        html, body {
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* Body must never scroll to prevent bottom bar cutoffs */
+        }
+        
+        body {
+            display: flex;
+            flex-direction: column;
+            background-color: #f8fafc;
+        }
+
+        /* Prevent system browser gesture interference on active items */
+        button, select, input, .touch-element {
+            touch-action: manipulation;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        @media print {
+            body {
+                background: white !important;
+                color: black !important;
+                overflow: visible !important;
+                height: auto !important;
+            }
+            .no-print {
+                display: none !important;
+            }
+            .print-page {
+                display: block !important;
+                page-break-before: always;
+            }
+            .print-grid {
+                display: grid !important;
+                grid-template-columns: repeat(2, 1fr) !important;
+                gap: 20px !important;
+                padding: 10px !important;
+                background: white !important;
+            }
+            .print-card {
+                box-shadow: none !important;
+                border: 2px dashed #9ca3af !important;
+                break-inside: avoid !important;
+                page-break-inside: avoid !important;
+            }
+        }
+        
+        /* Custom scrollbar for better visual look */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* 3D card flips for matching game */
+        .perspective {
+            perspective: 1000px;
+        }
+        .preserve-3d {
+            transform-style: preserve-3d;
+        }
+        .backface-hidden {
+            backface-visibility: hidden;
+        }
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
+    </style>
+</head>
+<body class="text-slate-800 font-sans antialiased">
+
+    <!-- Sticky Header (Flex-None) -->
+    <header class="bg-white border-b border-slate-200 py-4 px-6 flex-none no-print shadow-sm z-40">
+        <div class="max-w-7xl mx-auto flex flex-col xl:flex-row xl:items-center xl:justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="bg-indigo-600 text-white p-3 rounded-2xl shadow-md flex items-center justify-center min-h-[48px] min-w-[48px]">
+                    <i class="fa-solid fa-dice-five text-2xl animate-pulse"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-bold text-slate-900 tracking-tight">Grade 1 Dot Flashcard Builder</h1>
+                    <p class="text-xs md:text-sm text-slate-500 font-medium">Standard Dot Patterns & Subitizing Games for Primary Math</p>
+                </div>
+            </div>
+            
+            <!-- Navigation Controls with Optimized Touch Targets -->
+            <div class="flex flex-wrap items-center gap-2">
+                <button onclick="switchTab('dashboard')" id="btn-tab-dashboard" class="px-4 py-3 rounded-xl text-sm font-semibold bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition duration-150 flex items-center gap-2 min-h-[48px] min-w-[48px]">
+                    <i class="fa-solid fa-border-all text-base"></i> Card Set
+                </button>
+                <button onclick="switchTab('slideshow')" id="btn-tab-slideshow" class="px-4 py-3 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-100 transition duration-150 flex items-center gap-2 min-h-[48px] min-w-[48px]">
+                    <i class="fa-solid fa-play text-base"></i> Slideshow Trainer
+                </button>
+                <button onclick="switchTab('game-subitize')" id="btn-tab-game-subitize" class="px-4 py-3 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-100 transition duration-150 flex items-center gap-2 min-h-[48px] min-w-[48px]">
+                    <i class="fa-solid fa-bolt text-base"></i> Speed Subitizing
+                </button>
+                <button onclick="switchTab('game-matching')" id="btn-tab-game-matching" class="px-4 py-3 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-100 transition duration-150 flex items-center gap-2 min-h-[48px] min-w-[48px]">
+                    <i class="fa-solid fa-puzzle-piece text-base"></i> Memory Match
+                </button>
+                <button onclick="triggerPrint()" class="xl:ml-2 bg-slate-900 hover:bg-slate-800 text-white px-5 py-3 rounded-xl text-sm font-semibold shadow-sm hover:shadow transition duration-150 flex items-center gap-2 min-h-[48px] min-w-[48px]">
+                    <i class="fa-solid fa-print text-base"></i> Print Cards
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace Container (Scroll-optimized inside window) -->
+    <main class="flex-grow min-h-0 w-full max-w-7xl mx-auto p-4 md:p-6 no-print flex flex-col">
+        
+        <!-- Tab: Main Cards Dashboard -->
+        <div id="tab-dashboard" class="tab-content flex flex-col lg:flex-row gap-6 h-full min-h-0">
+            
+            <!-- Left Config Sidebar (Scrollable Container) -->
+            <aside class="w-full lg:w-80 xl:w-96 flex-shrink-0 flex flex-col min-h-0">
+                <div class="overflow-y-scroll overscroll-contain bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-6 h-full pb-32">
+                    <div class="border-b border-slate-100 pb-3">
+                        <h3 class="font-bold text-slate-900 text-base flex items-center gap-2">
+                            <i class="fa-solid fa-sliders text-indigo-500"></i> Card Visuals
+                        </h3>
+                        <p class="text-xs text-slate-500 mt-0.5">Customize properties instantly</p>
+                    </div>
+
+                    <!-- Dot Color Selection with 48px standard targets -->
+                    <div class="space-y-2">
+                        <label class="text-xs font-bold text-slate-600 uppercase tracking-wider block">Dot Color</label>
+                        <div class="grid grid-cols-4 gap-3">
+                            <button onclick="setDotColor('#000000', this)" class="dot-color-btn h-12 w-full min-h-[48px] rounded-xl bg-black border-2 border-indigo-600 relative flex items-center justify-center" title="Solid Black">
+                                <i class="fa-solid fa-check text-white text-base"></i>
+                            </button>
+                            <button onclick="setDotColor('#dc2626', this)" class="dot-color-btn h-12 w-full min-h-[48px] rounded-xl bg-red-600 border-2 border-transparent hover:scale-105 transition duration-150" title="Bright Red"></button>
+                            <button onclick="setDotColor('#2563eb', this)" class="dot-color-btn h-12 w-full min-h-[48px] rounded-xl bg-blue-600 border-2 border-transparent hover:scale-105 transition duration-150" title="School Blue"></button>
+                            <button onclick="setDotColor('#16a34a', this)" class="dot-color-btn h-12 w-full min-h-[48px] rounded-xl bg-green-600 border-2 border-transparent hover:scale-105 transition duration-150" title="Math Green"></button>
+                        </div>
+                    </div>
+
+                    <!-- Dot Size Slider with larger, easy grab bar -->
+                    <div class="space-y-2">
+                        <div class="flex justify-between text-xs font-bold text-slate-600 uppercase tracking-wider">
+                            <span>Dot Radius</span>
+                            <span id="radius-value" class="text-indigo-600 font-mono">16px</span>
+                        </div>
+                        <input type="range" id="dot-radius-slider" min="10" max="24" value="16" oninput="updateDotRadius(this.value)" class="w-full accent-indigo-600 h-3 bg-slate-100 rounded-lg appearance-none cursor-pointer min-h-[48px]">
+                    </div>
+
+                    <!-- Card Style Options with large toggle buttons -->
+                    <div class="space-y-4 pt-2">
+                        <label class="text-xs font-bold text-slate-600 uppercase tracking-wider block">Card Style</label>
+                        
+                        <div class="flex items-center justify-between py-1">
+                            <span class="text-sm font-medium text-slate-700">Show Ten-Frame Grid</span>
+                            <button onclick="toggleTenFrameGrid()" id="toggle-grid-btn" class="relative inline-flex h-12 w-20 items-center rounded-full bg-slate-200 transition-colors duration-200 focus:outline-none min-h-[48px] min-w-[48px] px-2">
+                                <span class="inline-block h-6 w-6 transform rounded-full bg-white transition duration-200 translate-x-1" id="toggle-grid-dot"></span>
+                            </button>
+                        </div>
+
+                        <div class="flex items-center justify-between py-1">
+                            <span class="text-sm font-medium text-slate-700">Show Cut Lines</span>
+                            <button onclick="toggleCutLines()" id="toggle-cut-btn" class="relative inline-flex h-12 w-20 items-center rounded-full bg-indigo-600 transition-colors duration-200 focus:outline-none min-h-[48px] min-w-[48px] px-2">
+                                <span class="inline-block h-6 w-6 transform rounded-full bg-white transition duration-200 translate-x-10" id="toggle-cut-dot"></span>
+                            </button>
+                        </div>
+
+                        <div class="flex items-center justify-between py-1">
+                            <span class="text-sm font-medium text-slate-700">Rounded Corners</span>
+                            <button onclick="toggleRoundedCorners()" id="toggle-rounded-btn" class="relative inline-flex h-12 w-20 items-center rounded-full bg-indigo-600 transition-colors duration-200 focus:outline-none min-h-[48px] min-w-[48px] px-2">
+                                <span class="inline-block h-6 w-6 transform rounded-full bg-white transition duration-200 translate-x-10" id="toggle-rounded-dot"></span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Print Sheet Settings Frame inside Sidebar -->
+                    <div class="bg-gradient-to-br from-indigo-900 to-slate-900 text-white p-5 rounded-2xl shadow-md space-y-4">
+                        <h3 class="font-bold text-base flex items-center gap-2 text-indigo-200">
+                            <i class="fa-solid fa-print"></i> Print Layout
+                        </h3>
+                        
+                        <div>
+                            <label class="text-xs font-semibold text-indigo-200 block mb-1">Cards Per Sheet (A4)</label>
+                            <select id="print-layout-select" class="w-full bg-indigo-950 border border-indigo-700 rounded-xl px-3 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 min-h-[48px]">
+                                <option value="4">4 Cards Per Page (Large)</option>
+                                <option value="6" selected>6 Cards Per Page (Standard)</option>
+                                <option value="12">12 Cards Per Page (Pocket Size)</option>
+                            </select>
+                        </div>
+
+                        <button onclick="triggerPrint()" class="w-full bg-white hover:bg-slate-100 text-slate-950 font-bold py-3 px-4 rounded-xl text-sm transition duration-150 flex items-center justify-center gap-2 shadow min-h-[48px]">
+                            <i class="fa-solid fa-print text-indigo-600 text-base"></i> Print Sheets
+                        </button>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Content Card Grid (Scrollable Container) -->
+            <div class="flex-grow flex flex-col min-h-0 w-full">
+                <div class="overflow-y-scroll overscroll-contain h-full pb-32 space-y-6">
+                    <!-- Informative Guidelines banner -->
+                    <div class="bg-indigo-50 border border-indigo-100 rounded-2xl p-4 flex gap-3 items-start">
+                        <i class="fa-solid fa-circle-info text-indigo-500 text-lg mt-0.5"></i>
+                        <div>
+                            <h4 class="font-semibold text-indigo-900 text-sm">Grade 1 Curriculum Alignment</h4>
+                            <p class="text-xs text-indigo-700 leading-relaxed mt-0.5">These 12 cards align to core early algebra models. Click any card below to launch presentation mode or inspect its pattern.</p>
+                        </div>
+                    </div>
+
+                    <!-- Cards Display Arena -->
+                    <div id="cards-gallery" class="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
+                        <!-- Javascript will dynamically inject the 12 card templates here -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Tab: Full Slideshow Trainer -->
+        <div id="tab-slideshow" class="tab-content hidden h-full min-h-0">
+            <div class="overflow-y-scroll overscroll-contain h-full pb-32">
+                <div class="bg-white border border-slate-200 p-6 rounded-3xl shadow-sm text-center max-w-4xl mx-auto">
+                    <h3 class="font-bold text-lg text-slate-800">Classroom Flashcard Presentation Mode</h3>
+                    <p class="text-sm text-slate-500 mt-1">Ideal for active group training on interactive whiteboards. Touch slides or use physical arrows.</p>
+                    
+                    <!-- Interactive Slide View Box -->
+                    <div class="my-6 flex justify-center">
+                        <div class="relative w-80 h-112 aspect-[2/3] bg-white border border-slate-200 shadow-xl rounded-2xl flex flex-col justify-between p-6 overflow-hidden" id="slideshow-card-box">
+                            <div class="text-left font-mono text-xs text-slate-400 font-bold uppercase tracking-wider" id="slideshow-index-label">CARD 1 / 12</div>
+                            
+                            <!-- Vector Card Canvas Container -->
+                            <div class="flex-grow flex items-center justify-center" id="slideshow-card-canvas">
+                                <!-- SVG Injected programmatically -->
+                            </div>
+
+                            <!-- Reveal Value Area -->
+                            <div class="border-t border-slate-100 pt-3 flex flex-col items-center">
+                                <span class="text-xs font-semibold text-slate-400 uppercase tracking-widest mb-1.5">Interactive Verification</span>
+                                <div id="slideshow-reveal-wrapper" class="h-14 w-full flex items-center justify-center">
+                                    <button onclick="revealSlideshowAnswer()" id="btn-slideshow-reveal" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-3 rounded-xl text-sm transition-all duration-200 shadow-md min-h-[48px]">
+                                        <i class="fa-solid fa-eye mr-1.5"></i> Reveal Value
+                                    </button>
+                                    <span id="slideshow-answer-val" class="hidden text-3xl font-extrabold text-slate-900 font-child">5 Dots</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Slide Controls with 48px Minimum Targets -->
+                    <div class="flex flex-wrap items-center justify-center gap-4 border-t border-slate-100 pt-6">
+                        <div class="flex items-center gap-2">
+                            <button onclick="prevSlide()" class="bg-slate-100 hover:bg-slate-200 text-slate-800 p-4 rounded-xl transition duration-150 min-h-[48px] min-w-[48px]" title="Previous Slide (Left Arrow)">
+                                <i class="fa-solid fa-arrow-left text-lg"></i>
+                            </button>
+                            <button onclick="shuffleSlideshow()" class="bg-slate-100 hover:bg-slate-200 text-slate-800 p-4 rounded-xl transition duration-150 flex items-center gap-2 font-semibold text-sm min-h-[48px]">
+                                <i class="fa-solid fa-shuffle"></i> Shuffle
+                            </button>
+                            <button onclick="nextSlide()" class="bg-indigo-600 hover:bg-indigo-700 text-white p-4 px-6 rounded-xl transition duration-150 flex items-center gap-2 font-bold text-sm min-h-[48px]" title="Next Slide (Right Arrow or Space)">
+                                Next <i class="fa-solid fa-arrow-right"></i>
+                            </button>
+                        </div>
+
+                        <div class="hidden sm:block h-8 w-px bg-slate-200 mx-2"></div>
+
+                        <!-- Auto Play interval Selector -->
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs font-bold text-slate-500 uppercase">Auto Play:</span>
+                            <select id="slideshow-timer-select" onchange="handleSlideshowTimerChange()" class="bg-slate-100 border border-slate-200 text-slate-800 rounded-xl px-3 py-3 text-xs font-bold focus:outline-none min-h-[48px]">
+                                <option value="0">Manual Click</option>
+                                <option value="1500">Fast Speed (1.5s)</option>
+                                <option value="3000">Medium Speed (3.0s)</option>
+                                <option value="5000">Slow Practice (5.0s)</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Speed Subitizing Game -->
+        <div id="tab-game-subitize" class="tab-content hidden h-full min-h-0">
+            <div class="overflow-y-scroll overscroll-contain h-full pb-32">
+                <div class="bg-white border border-slate-200 p-6 rounded-3xl shadow-sm text-center max-w-3xl mx-auto">
+                    <div class="flex items-center justify-between border-b border-slate-100 pb-4 mb-4">
+                        <div class="text-left">
+                            <h3 class="font-bold text-lg text-slate-800">Subitizing Speed Practice</h3>
+                            <p class="text-xs text-slate-500 mt-0.5">Recognize amounts instantly without counting.</p>
+                        </div>
+                        <!-- Streak tracker -->
+                        <div class="bg-amber-50 border border-amber-200 rounded-2xl px-4 py-1.5 flex items-center gap-2 min-h-[48px]">
+                            <i class="fa-solid fa-fire text-amber-500 animate-bounce text-lg"></i>
+                            <span class="text-sm font-bold text-amber-800">Streak: <span id="subitize-streak">0</span></span>
+                        </div>
+                    </div>
+
+                    <!-- Configuration Panels -->
+                    <div id="subitize-setup-panel" class="py-6 space-y-4">
+                        <div class="max-w-md mx-auto p-5 bg-slate-50 rounded-2xl border border-slate-100 space-y-4">
+                            <h4 class="font-bold text-sm text-slate-700 uppercase tracking-wide">Configure Game Settings</h4>
+                            
+                            <div class="space-y-1 text-left">
+                                <label class="text-xs font-bold text-slate-600">Flash Duration (Milliseconds)</label>
+                                <select id="subitize-speed-select" class="w-full bg-white border border-slate-200 rounded-xl px-3 py-3 text-sm focus:outline-none min-h-[48px]">
+                                    <option value="350">Ultra Fast (350ms) - Expert</option>
+                                    <option value="600" selected>Standard (600ms) - Recommended</option>
+                                    <option value="1000">Extended (1000ms) - Beginner</option>
+                                    <option value="2000">Slow (2000ms)</option>
+                                </select>
+                            </div>
+
+                            <button onclick="startSubitizingRound()" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3.5 px-4 rounded-xl text-sm transition-all duration-150 shadow-md min-h-[48px]">
+                                Start Flash Drill
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Core Active Game View -->
+                    <div id="subitize-play-panel" class="hidden py-4 space-y-8">
+                        <div class="relative flex justify-center items-center min-h-[340px]">
+                            <!-- Countdown Indicator -->
+                            <div id="subitize-countdown-overlay" class="absolute inset-0 flex flex-col justify-center items-center bg-white z-10 rounded-2xl">
+                                <span class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">Get Ready</span>
+                                <span id="subitize-countdown-text" class="text-6xl font-extrabold text-indigo-600 font-child animate-ping">3</span>
+                            </div>
+
+                            <!-- Card Flasher Canvas Frame -->
+                            <div id="subitize-card-canvas-box" class="w-72 h-108 aspect-[2/3] bg-white border border-slate-200 shadow-xl rounded-2xl flex flex-col justify-center items-center p-6 transition-all duration-300 transform scale-100 opacity-100">
+                                <!-- Temporary injection of Card SVG -->
+                            </div>
+
+                            <!-- Blocking Cover to stop counting -->
+                            <div id="subitize-card-blocker" class="hidden absolute w-72 h-108 bg-slate-900 text-white rounded-2xl flex flex-col justify-center items-center p-6 shadow-xl z-20">
+                                <i class="fa-solid fa-circle-question text-5xl text-indigo-300 animate-pulse"></i>
+                                <span class="text-lg font-bold mt-4 font-child">How many dots did you see?</span>
+                                <span class="text-xs text-slate-400 mt-1">Select an answer below to verify!</span>
+                            </div>
+                        </div>
+
+                        <!-- Touch Keypads with 48px Target standards -->
+                        <div class="space-y-3 max-w-xl mx-auto">
+                            <div class="grid grid-cols-4 sm:grid-cols-6 gap-3">
+                                <button onclick="submitSubitizingAnswer(0)" class="bg-slate-100 hover:bg-slate-200 text-slate-900 font-bold p-4 rounded-xl text-lg transition font-child min-h-[48px] min-w-[48px]">0</button>
+                                <button onclick="submitSubitizingAnswer(1)" class="bg-slate-100 hover:bg-slate-200 text-slate-900 font-bold p-4 rounded-xl text-lg transition font-child min-h-[48px] min-w-[48px]">1</button>
+                                <button onclick="submitSubitizingAnswer(2)" class="bg-slate-100 hover:bg-slate-200 text-slate-900 font-bold p-4 rounded-xl text-lg transition font-child min-h-[48px] min-w-[48px]">2</button>
+                                <button onclick="submitSubitizingAnswer(3)" class="bg-slate-100 hover:bg-slate-200 text-slate-900 font-bold p-4 rounded-xl text-lg transition font-child min-h-[48px] min-w-[48px]">3</button>
+                                <button onclick="submitSubitizingAnswer(4)" class="bg-slate-100 hover:bg-slate-200 text-slate-900 font-bold p-4 rounded-xl text-lg transition font-child min-h-[48px] min-w-[48px]">4</button>
+                                <button onclick="submitSubitizingAnswer(5)" class="bg-slate-100 hover:bg-slate-200 text-slate-900 font-bold p-4 rounded-xl text-lg transition font-child min-h-[48px] min-w-[48px]">5</button>
+                                <button onclick="submitSubitizingAnswer(6)" class="bg-slate-100 hover:bg-slate-200 text-slate-900 font-bold p-4 rounded-xl text-lg transition font-child min-h-[48px] min-w-[48px]">6</button>
+                                <button onclick="submitSubitizingAnswer(7)" class="bg-slate-100 hover:bg-slate-200 text-slate-900 font-bold p-4 rounded-xl text-lg transition font-child min-h-[48px] min-w-[48px]">7</button>
+                                <button onclick="submitSubitizingAnswer(8)" class="bg-slate-100 hover:bg-slate-200 text-slate-900 font-bold p-4 rounded-xl text-lg transition font-child min-h-[48px] min-w-[48px]">8</button>
+                                <button onclick="submitSubitizingAnswer(9)" class="bg-slate-100 hover:bg-slate-200 text-slate-900 font-bold p-4 rounded-xl text-lg transition font-child min-h-[48px] min-w-[48px]">9</button>
+                                <button onclick="submitSubitizingAnswer(10)" class="bg-slate-100 hover:bg-slate-200 text-slate-900 font-bold p-4 rounded-xl text-lg transition font-child min-h-[48px] min-w-[48px]">10</button>
+                                <button onclick="triggerFlashReplay()" class="bg-amber-100 hover:bg-amber-200 text-amber-800 font-bold p-4 rounded-xl text-sm transition flex items-center justify-center min-h-[48px] min-w-[48px]" title="Replay Flash">
+                                    <i class="fa-solid fa-redo text-base"></i>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- feedback panel -->
+                        <div id="subitize-feedback" class="hidden p-4 rounded-2xl max-w-md mx-auto text-center font-bold">
+                            <!-- Injected programmatically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tab: Memory Match Game -->
+        <div id="tab-game-matching" class="tab-content hidden h-full min-h-0">
+            <div class="overflow-y-scroll overscroll-contain h-full pb-32">
+                <div class="bg-white border border-slate-200 p-6 rounded-3xl shadow-sm max-w-5xl mx-auto">
+                    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-100 pb-4 mb-6">
+                        <div>
+                            <h3 class="font-bold text-lg text-slate-800">Math Dot Memory Match</h3>
+                            <p class="text-xs text-slate-500">Pair dot configurations with digit amounts!</p>
+                        </div>
+                        
+                        <!-- Actions panel with 48px target bounds -->
+                        <div class="flex flex-wrap items-center gap-3">
+                            <select id="match-mode-select" class="bg-slate-100 border border-slate-200 text-slate-800 rounded-xl px-3 py-3 text-xs font-bold focus:outline-none min-h-[48px]">
+                                <option value="dots-to-digits">Match Dots to Digits</option>
+                                <option value="dots-to-dots">Match Dots to Dots</option>
+                            </select>
+                            <button onclick="initMatchingGame()" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-5 py-3 rounded-xl text-xs transition duration-150 flex items-center gap-1.5 shadow min-h-[48px]">
+                                <i class="fa-solid fa-rotate-right"></i> Restart Game
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Stats Bar -->
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 mb-6 max-w-md mx-auto text-center">
+                        <div class="bg-slate-50 border border-slate-100 p-2 rounded-xl">
+                            <span class="text-[10px] uppercase font-bold text-slate-400 block">Moves Made</span>
+                            <span id="match-moves-count" class="text-lg font-extrabold text-slate-800">0</span>
+                        </div>
+                        <div class="bg-slate-50 border border-slate-100 p-2 rounded-xl">
+                            <span class="text-[10px] uppercase font-bold text-slate-400 block">Pairs Found</span>
+                            <span id="match-pairs-count" class="text-lg font-extrabold text-slate-800">0 / 6</span>
+                        </div>
+                        <div class="bg-green-50 border border-green-100 p-2 rounded-xl col-span-2 sm:col-span-1 flex items-center justify-center">
+                            <span id="match-victory-banner" class="hidden text-xs font-extrabold text-green-700 uppercase tracking-wider animate-pulse"><i class="fa-solid fa-circle-check"></i> Clean Clear!</span>
+                            <span id="match-play-timer" class="text-lg font-extrabold text-slate-800 font-mono">00:00</span>
+                        </div>
+                    </div>
+
+                    <!-- Play Board Grid -->
+                    <div id="match-board" class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 max-w-4xl mx-auto">
+                        <!-- Generated Cards Injected Here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 py-4 px-4 text-center text-xs text-slate-400 flex-none no-print">
+        <div class="max-w-7xl mx-auto">
+            <p class="font-medium text-slate-500">Classroom optimized for Smartboards, Mobile, and Desktop systems.</p>
+        </div>
+    </footer>
+
+    <!-- Print area placeholder -->
+    <div id="printable-area" class="hidden bg-white text-black p-0 m-0">
+        <!-- Dynamic printable grids built prior to calling print -->
+    </div>
+
+    <!-- ========================================== -->
+    <!-- JAVASCRIPT LOGIC BLOCK                     -->
+    <!-- ========================================== -->
+    <script>
+        // Define global configurations for card designs (Width 200, Height 300 ratio)
+        const DOT_RADIUS_DEFAULT = 16;
+        let globalConfig = {
+            dotColor: '#000000',
+            dotRadius: DOT_RADIUS_DEFAULT,
+            showGrid: false,
+            cutLines: true,
+            rounded: true
+        };
+
+        // Complete set of 12 distinct card metadata definitions
+        const CARDS_DATA = [
+            { id: 1, count: 0, label: "0 Dots (Blank Set)", style: "blank" },
+            { id: 2, count: 1, label: "1 Dot (Center)", style: "dice" },
+            { id: 3, count: 2, label: "2 Dots (Diagonal Linear)", style: "dice" },
+            { id: 4, count: 3, label: "3 Dots (Tri-linear Diagonal)", style: "dice" },
+            { id: 5, count: 4, label: "4 Dots (Quad Corner)", style: "dice" },
+            { id: 6, count: 5, label: "5 Dots (5-Frame Single Row)", style: "tenframe" },
+            { id: 7, count: 6, label: "6 Dots (Standard Dice 2x3 Grid)", style: "dice" },
+            { id: 8, count: 7, label: "7 Dots (Dual Columns + Middle)", style: "math" },
+            { id: 9, count: 8, label: "8 Dots (Symmetrical 4x2 Grid)", style: "dice" },
+            { id: 10, count: 9, label: "9 Dots (Perfect 3x3 Block Grid)", style: "dice" },
+            { id: 11, count: 10, label: "10 Dots (Complete 5x2 Ten-Frame)", style: "tenframe" },
+            { id: 12, count: 5, label: "5 Dots (Classic Cross - Match Card)", style: "dice" }
+        ];
+
+        // Coordinate systems for both "dice/domino standard" structures and "ten-frame layout" structures
+        const LAYOUTS = {
+            1: [],
+            2: [ { x: 100, y: 150 } ],
+            3: [ { x: 60, y: 110 }, { x: 140, y: 190 } ],
+            4: [ { x: 55, y: 95 }, { x: 100, y: 150 }, { x: 145, y: 205 } ],
+            5: [ { x: 60, y: 110 }, { x: 140, y: 110 }, { x: 60, y: 190 }, { x: 140, y: 190 } ],
+            6: [ { x: 40, y: 110 }, { x: 70, y: 110 }, { x: 100, y: 110 }, { x: 130, y: 110 }, { x: 160, y: 110 } ],
+            7: [ { x: 60, y: 90 }, { x: 60, y: 150 }, { x: 60, y: 210 }, { x: 140, y: 90 }, { x: 140, y: 150 }, { x: 140, y: 210 } ],
+            8: [ { x: 60, y: 90 }, { x: 60, y: 150 }, { x: 60, y: 210 }, { x: 140, y: 90 }, { x: 140, y: 150 }, { x: 140, y: 210 }, { x: 100, y: 150 } ],
+            9: [ { x: 60, y: 80 }, { x: 60, y: 126 }, { x: 60, y: 172 }, { x: 60, y: 218 }, { x: 140, y: 80 }, { x: 140, y: 126 }, { x: 140, y: 172 }, { x: 140, y: 218 } ],
+            10: [ { x: 50, y: 95 }, { x: 100, y: 95 }, { x: 150, y: 95 }, { x: 50, y: 150 }, { x: 100, y: 150 }, { x: 150, y: 150 }, { x: 50, y: 205 }, { x: 100, y: 205 }, { x: 150, y: 205 } ],
+            11: [
+                { x: 40, y: 110 }, { x: 70, y: 110 }, { x: 100, y: 110 }, { x: 130, y: 110 }, { x: 160, y: 110 },
+                { x: 40, y: 190 }, { x: 70, y: 190 }, { x: 100, y: 190 }, { x: 130, y: 190 }, { x: 160, y: 190 }
+            ],
+            12: [ { x: 60, y: 110 }, { x: 140, y: 110 }, { x: 100, y: 150 }, { x: 60, y: 190 }, { x: 140, y: 190 } ]
+        };
+
+        const TENFRAME_LAYOUTS = {
+            1: [],
+            2: [{ x: 40, y: 110 }],
+            3: [{ x: 40, y: 110 }, { x: 70, y: 110 }],
+            4: [{ x: 40, y: 110 }, { x: 70, y: 110 }, { x: 100, y: 110 }],
+            5: [{ x: 40, y: 110 }, { x: 70, y: 110 }, { x: 100, y: 110 }, { x: 130, y: 110 }],
+            6: [{ x: 40, y: 110 }, { x: 70, y: 110 }, { x: 100, y: 110 }, { x: 130, y: 110 }, { x: 160, y: 110 }],
+            7: [
+                { x: 40, y: 110 }, { x: 70, y: 110 }, { x: 100, y: 110 }, { x: 130, y: 110 }, { x: 160, y: 110 },
+                { x: 40, y: 190 }
+            ],
+            8: [
+                { x: 40, y: 110 }, { x: 70, y: 110 }, { x: 100, y: 110 }, { x: 130, y: 110 }, { x: 160, y: 110 },
+                { x: 40, y: 190 }, { x: 70, y: 190 }
+            ],
+            9: [
+                { x: 40, y: 110 }, { x: 70, y: 110 }, { x: 100, y: 110 }, { x: 130, y: 110 }, { x: 160, y: 110 },
+                { x: 40, y: 190 }, { x: 70, y: 190 }, { x: 100, y: 190 }
+            ],
+            10: [
+                { x: 40, y: 110 }, { x: 70, y: 110 }, { x: 100, y: 110 }, { x: 130, y: 110 }, { x: 160, y: 110 },
+                { x: 40, y: 190 }, { x: 70, y: 190 }, { x: 100, y: 190 }, { x: 130, y: 190 }
+            ],
+            11: [
+                { x: 40, y: 110 }, { x: 70, y: 110 }, { x: 100, y: 110 }, { x: 130, y: 110 }, { x: 160, y: 110 },
+                { x: 40, y: 190 }, { x: 70, y: 190 }, { x: 100, y: 190 }, { x: 130, y: 190 }, { x: 160, y: 190 }
+            ],
+            12: [{ x: 40, y: 110 }, { x: 70, y: 110 }, { x: 100, y: 110 }, { x: 130, y: 110 }, { x: 160, y: 110 }]
+        };
+
+        // Render card SVG programmatically
+        function drawCardSvg(cardId, printMode = false) {
+            const cardObj = CARDS_DATA.find(c => c.id === cardId);
+            if (!cardObj) return '';
+
+            let points = LAYOUTS[cardId];
+            if (globalConfig.showGrid && cardId !== 1) {
+                points = TENFRAME_LAYOUTS[cardId];
+            }
+
+            let borderStyle = globalConfig.cutLines ? 'stroke="#cbd5e1" stroke-dasharray="4 4" stroke-width="1.5"' : 'stroke="none"';
+            if (printMode) {
+                borderStyle = 'stroke="#d1d5db" stroke-dasharray="6 4" stroke-width="2"';
+            }
+            
+            const rxVal = globalConfig.rounded ? "16" : "0";
+
+            let svgHtml = `<svg viewBox="0 0 200 300" class="w-full h-full" xmlns="http://www.w3.org/2000/svg">`;
+            svgHtml += `<rect x="2" y="2" width="196" height="296" rx="${rxVal}" ry="${rxVal}" fill="#ffffff" ${borderStyle} />`;
+
+            if (globalConfig.showGrid) {
+                svgHtml += `<!-- Ten-Frame Guideline System -->`;
+                svgHtml += `<rect x="25" y="65" width="150" height="170" fill="none" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="2 2" rx="4"/>`;
+                svgHtml += `<line x1="25" y1="150" x2="175" y2="150" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="2 2" />`;
+                for (let i = 1; i < 5; i++) {
+                    let colX = 25 + (i * 30);
+                    svgHtml += `<line x1="${colX}" y1="65" x2="${colX}" y2="235" stroke="#e2e8f0" stroke-width="1.5" stroke-dasharray="2 2" />`;
+                }
+            }
+
+            points.forEach(pt => {
+                svgHtml += `<circle cx="${pt.x}" cy="${pt.y}" r="${globalConfig.dotRadius}" fill="${globalConfig.dotColor}" />`;
+            });
+
+            svgHtml += `</svg>`;
+            return svgHtml;
+        }
+
+        function setDotColor(hexColor, buttonEl) {
+            globalConfig.dotColor = hexColor;
+            
+            document.querySelectorAll('.dot-color-btn').forEach(btn => {
+                btn.classList.remove('border-indigo-600', 'scale-105');
+                btn.classList.add('border-transparent');
+                const chk = btn.querySelector('i');
+                if (chk) chk.remove();
+            });
+            
+            buttonEl.classList.remove('border-transparent');
+            buttonEl.classList.add('border-indigo-600', 'scale-105');
+            buttonEl.innerHTML = `<i class="fa-solid fa-check text-white text-base"></i>`;
+            
+            renderAllTabViews();
+        }
+
+        function updateDotRadius(val) {
+            globalConfig.dotRadius = parseInt(val);
+            document.getElementById('radius-value').innerText = val + 'px';
+            renderAllTabViews();
+        }
+
+        function toggleTenFrameGrid() {
+            globalConfig.showGrid = !globalConfig.showGrid;
+            const dot = document.getElementById('toggle-grid-dot');
+            const btn = document.getElementById('toggle-grid-btn');
+            if (globalConfig.showGrid) {
+                btn.classList.remove('bg-slate-200');
+                btn.classList.add('bg-indigo-600');
+                dot.classList.remove('translate-x-1');
+                dot.classList.add('translate-x-10');
+            } else {
+                btn.classList.remove('bg-indigo-600');
+                btn.classList.add('bg-slate-200');
+                dot.classList.remove('translate-x-10');
+                dot.classList.add('translate-x-1');
+            }
+            renderAllTabViews();
+        }
+
+        function toggleCutLines() {
+            globalConfig.cutLines = !globalConfig.cutLines;
+            const dot = document.getElementById('toggle-cut-dot');
+            const btn = document.getElementById('toggle-cut-btn');
+            if (globalConfig.cutLines) {
+                btn.classList.remove('bg-slate-200');
+                btn.classList.add('bg-indigo-600');
+                dot.classList.remove('translate-x-1');
+                dot.classList.add('translate-x-10');
+            } else {
+                btn.classList.remove('bg-indigo-600');
+                btn.classList.add('bg-slate-200');
+                dot.classList.remove('translate-x-10');
+                dot.classList.add('translate-x-1');
+            }
+            renderAllTabViews();
+        }
+
+        function toggleRoundedCorners() {
+            globalConfig.rounded = !globalConfig.rounded;
+            const dot = document.getElementById('toggle-rounded-dot');
+            const btn = document.getElementById('toggle-rounded-btn');
+            if (globalConfig.rounded) {
+                btn.classList.remove('bg-slate-200');
+                btn.classList.add('bg-indigo-600');
+                dot.classList.remove('translate-x-1');
+                dot.classList.add('translate-x-10');
+            } else {
+                btn.classList.remove('bg-indigo-600');
+                btn.classList.add('bg-slate-200');
+                dot.classList.remove('translate-x-10');
+                dot.classList.add('translate-x-1');
+            }
+            renderAllTabViews();
+        }
+
+        // Render main grid gallery cards
+        function renderCardsGallery() {
+            const container = document.getElementById('cards-gallery');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            CARDS_DATA.forEach(card => {
+                const cardDiv = document.createElement('div');
+                cardDiv.setAttribute('onclick', `launchSingleCardFlash(${card.id})`);
+                cardDiv.className = "bg-white p-4 rounded-3xl border border-slate-200 shadow-sm hover:shadow-md cursor-pointer transition-all duration-200 flex flex-col justify-between space-y-4 group relative min-h-[48px]";
+                
+                const svgFrame = document.createElement('div');
+                svgFrame.className = "aspect-[2/3] w-full bg-white flex items-center justify-center p-2 rounded-2xl relative overflow-hidden";
+                svgFrame.innerHTML = drawCardSvg(card.id);
+                
+                const overlay = document.createElement('div');
+                overlay.className = "absolute inset-0 bg-slate-900/40 opacity-0 group-hover:opacity-100 transition duration-200 flex items-center justify-center gap-2 rounded-2xl p-4";
+                overlay.innerHTML = `
+                    <button class="bg-white hover:bg-slate-100 text-slate-800 p-3 px-4 rounded-xl font-bold text-xs flex items-center gap-1.5 shadow-md min-h-[48px]">
+                        <i class="fa-solid fa-expand text-base"></i> View Large
+                    </button>
+                `;
+                svgFrame.appendChild(overlay);
+
+                const metaDiv = document.createElement('div');
+                metaDiv.className = "text-center";
+                metaDiv.innerHTML = `
+                    <div class="text-xs font-extrabold text-slate-400 uppercase tracking-widest">Card ${card.id}</div>
+                    <div class="text-sm font-bold text-slate-800 font-child mt-0.5">${card.label}</div>
+                `;
+                
+                cardDiv.appendChild(svgFrame);
+                cardDiv.appendChild(metaDiv);
+                container.appendChild(cardDiv);
+            });
+        }
+
+        let activeTab = 'dashboard';
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(pane => pane.classList.add('hidden'));
+            document.querySelectorAll('[id^="btn-tab-"]').forEach(btn => {
+                btn.className = "px-4 py-3 rounded-xl text-sm font-semibold text-slate-600 hover:bg-slate-100 transition duration-150 flex items-center gap-2 min-h-[48px]";
+            });
+
+            const currentTab = document.getElementById(`tab-${tabId}`);
+            if (currentTab) currentTab.classList.remove('hidden');
+            
+            const activeBtn = document.getElementById(`btn-tab-${tabId}`);
+            if (activeBtn) {
+                activeBtn.className = "px-4 py-3 rounded-xl text-sm font-semibold bg-indigo-50 text-indigo-700 hover:bg-indigo-100 transition duration-150 flex items-center gap-2 min-h-[48px]";
+            }
+
+            activeTab = tabId;
+
+            if (tabId === 'slideshow') {
+                initSlideshow();
+            } else if (tabId === 'game-subitize') {
+                resetSubitizingGame();
+            } else if (tabId === 'game-matching') {
+                initMatchingGame();
+            }
+        }
+
+        function renderAllTabViews() {
+            renderCardsGallery();
+            if (activeTab === 'slideshow') {
+                renderSlideshowCurrent();
+            }
+        }
+
+        let slideshowIndex = 0;
+        let slideshowSequence = [...CARDS_DATA.map(c => c.id)];
+        let slideshowTimerId = null;
+
+        function initSlideshow() {
+            slideshowIndex = 0;
+            slideshowSequence = [...CARDS_DATA.map(c => c.id)];
+            renderSlideshowCurrent();
+            
+            if (slideshowTimerId) {
+                clearInterval(slideshowTimerId);
+                slideshowTimerId = null;
+            }
+            document.getElementById('slideshow-timer-select').value = "0";
+        }
+
+        function renderSlideshowCurrent() {
+            const currentId = slideshowSequence[slideshowIndex];
+            const cardObj = CARDS_DATA.find(c => c.id === currentId);
+            
+            const canvas = document.getElementById('slideshow-card-canvas');
+            canvas.innerHTML = drawCardSvg(currentId);
+            
+            document.getElementById('slideshow-index-label').innerText = `Card ${slideshowIndex + 1} of ${slideshowSequence.length}`;
+            
+            document.getElementById('slideshow-reveal-wrapper').className = "h-14 w-full flex items-center justify-center";
+            document.getElementById('btn-slideshow-reveal').className = "bg-indigo-600 hover:bg-indigo-700 text-white font-bold px-6 py-3 rounded-xl text-sm transition-all duration-200 shadow-md min-h-[48px]";
+            document.getElementById('slideshow-answer-val').className = "hidden text-3xl font-extrabold text-indigo-600 font-child";
+            document.getElementById('slideshow-answer-val').innerText = `${cardObj.count} ${cardObj.count === 1 ? 'Dot' : 'Dots'}`;
+        }
+
+        function revealSlideshowAnswer() {
+            document.getElementById('btn-slideshow-reveal').className = "hidden";
+            document.getElementById('slideshow-answer-val').className = "block text-3xl font-extrabold text-slate-900 font-child animate-bounce";
+        }
+
+        function nextSlide() {
+            slideshowIndex = (slideshowIndex + 1) % slideshowSequence.length;
+            renderSlideshowCurrent();
+        }
+
+        function prevSlide() {
+            slideshowIndex = (slideshowIndex - 1 + slideshowSequence.length) % slideshowSequence.length;
+            renderSlideshowCurrent();
+        }
+
+        function shuffleSlideshow() {
+            for (let i = slideshowSequence.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [slideshowSequence[i], slideshowSequence[j]] = [slideshowSequence[j], slideshowSequence[i]];
+            }
+            slideshowIndex = 0;
+            renderSlideshowCurrent();
+        }
+
+        function handleSlideshowTimerChange() {
+            const selectEl = document.getElementById('slideshow-timer-select');
+            const speed = parseInt(selectEl.value);
+            
+            if (slideshowTimerId) {
+                clearInterval(slideshowTimerId);
+                slideshowTimerId = null;
+            }
+
+            if (speed > 0) {
+                slideshowTimerId = setInterval(() => {
+                    nextSlide();
+                }, speed);
+            }
+        }
+
+        function launchSingleCardFlash(cardId) {
+            switchTab('slideshow');
+            const idx = slideshowSequence.indexOf(cardId);
+            if (idx !== -1) {
+                slideshowIndex = idx;
+                renderSlideshowCurrent();
+            }
+        }
+
+        let subitizeCurrentId = null;
+        let subitizeStreak = 0;
+        let subitizeAnswered = false;
+        let flashTimerId = null;
+
+        function resetSubitizingGame() {
+            subitizeStreak = 0;
+            document.getElementById('subitize-streak').innerText = '0';
+            document.getElementById('subitize-setup-panel').className = "py-6 space-y-4";
+            document.getElementById('subitize-play-panel').className = "hidden py-4 space-y-8";
+        }
+
+        function startSubitizingRound() {
+            document.getElementById('subitize-setup-panel').className = "hidden";
+            document.getElementById('subitize-play-panel').className = "py-4 space-y-8";
+            document.getElementById('subitize-card-blocker').className = "hidden absolute w-72 h-108 bg-slate-900 text-white rounded-2xl flex flex-col justify-center items-center p-6 shadow-xl z-20";
+            document.getElementById('subitize-feedback').className = "hidden";
+            subitizeAnswered = false;
+
+            const randomCard = CARDS_DATA[Math.floor(Math.random() * CARDS_DATA.length)];
+            subitizeCurrentId = randomCard.id;
+
+            const overlay = document.getElementById('subitize-countdown-overlay');
+            const countdownText = document.getElementById('subitize-countdown-text');
+            overlay.classList.remove('hidden');
+
+            let countdown = 3;
+            countdownText.innerText = countdown;
+
+            if (flashTimerId) clearInterval(flashTimerId);
+
+            flashTimerId = setInterval(() => {
+                countdown--;
+                if (countdown > 0) {
+                    countdownText.innerText = countdown;
+                } else {
+                    clearInterval(flashTimerId);
+                    overlay.classList.add('hidden');
+                    triggerFlashAnimation();
+                }
+            }, 550);
+        }
+
+        function triggerFlashAnimation() {
+            const canvasBox = document.getElementById('subitize-card-canvas-box');
+            const speed = parseInt(document.getElementById('subitize-speed-select').value);
+
+            canvasBox.innerHTML = drawCardSvg(subitizeCurrentId);
+            canvasBox.className = "w-72 h-108 aspect-[2/3] bg-white border border-slate-200 shadow-xl rounded-2xl flex flex-col justify-center items-center p-6 transition-all duration-300 transform scale-100 opacity-100";
+
+            setTimeout(() => {
+                if (!subitizeAnswered) {
+                    canvasBox.className = "w-72 h-108 aspect-[2/3] bg-white border border-slate-200 shadow-xl rounded-2xl flex flex-col justify-center items-center p-6 transition-all duration-300 transform scale-95 opacity-0";
+                    document.getElementById('subitize-card-blocker').className = "absolute w-72 h-108 bg-slate-900 text-white rounded-2xl flex flex-col justify-center items-center p-6 shadow-xl z-20";
+                }
+            }, speed);
+        }
+
+        function triggerFlashReplay() {
+            if (subitizeAnswered) return;
+            document.getElementById('subitize-card-blocker').className = "hidden absolute w-72 h-108 bg-slate-900 text-white rounded-2xl flex flex-col justify-center items-center p-6 shadow-xl z-20";
+            triggerFlashAnimation();
+        }
+
+        function submitSubitizingAnswer(userGuess) {
+            if (subitizeAnswered) return;
+            subitizeAnswered = true;
+
+            const cardObj = CARDS_DATA.find(c => c.id === subitizeCurrentId);
+            const actualCount = cardObj.count;
+            
+            const canvasBox = document.getElementById('subitize-card-canvas-box');
+            canvasBox.innerHTML = drawCardSvg(subitizeCurrentId);
+            canvasBox.className = "w-72 h-108 aspect-[2/3] bg-white border border-slate-200 shadow-xl rounded-2xl flex flex-col justify-center items-center p-6 transition-all duration-300 transform scale-100 opacity-100";
+            document.getElementById('subitize-card-blocker').className = "hidden";
+
+            const feedback = document.getElementById('subitize-feedback');
+            feedback.className = "p-5 rounded-2xl max-w-md mx-auto text-center font-bold text-base shadow border transition duration-200";
+
+            if (userGuess === actualCount) {
+                subitizeStreak++;
+                document.getElementById('subitize-streak').innerText = subitizeStreak;
+                feedback.classList.add('bg-green-100', 'text-green-800', 'border-green-200');
+                feedback.innerHTML = `
+                    <div class="text-lg">🎉 Fantastic Job!</div>
+                    <div class="text-sm font-medium mt-1">That's correct, there are exactly ${actualCount} dots on the card.</div>
+                    <button onclick="startSubitizingRound()" class="mt-3 bg-green-700 hover:bg-green-800 text-white px-5 py-3 rounded-xl text-xs font-bold transition min-h-[48px]">Next Flash Card</button>
+                `;
+            } else {
+                subitizeStreak = 0;
+                document.getElementById('subitize-streak').innerText = subitizeStreak;
+                feedback.classList.add('bg-red-100', 'text-red-800', 'border-red-200');
+                feedback.innerHTML = `
+                    <div class="text-lg">Oops! Keep Practicing</div>
+                    <div class="text-sm font-medium mt-1">It actually has ${actualCount} ${actualCount === 1 ? 'dot' : 'dots'}. You picked ${userGuess}. Let's try again!</div>
+                    <button onclick="startSubitizingRound()" class="mt-3 bg-red-700 hover:bg-red-800 text-white px-5 py-3 rounded-xl text-xs font-bold transition min-h-[48px]">Try Next Card</button>
+                `;
+            }
+        }
+
+        let matchCardsArray = [];
+        let firstCardSelected = null;
+        let secondCardSelected = null;
+        let lockGameInput = false;
+        let matchMoves = 0;
+        let matchPairsFound = 0;
+        let matchGameTimer = null;
+        let matchStartTime = null;
+
+        function initMatchingGame() {
+            const mode = document.getElementById('match-mode-select').value;
+            const cardSubset = [...CARDS_DATA];
+            
+            for (let i = cardSubset.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [cardSubset[i], cardSubset[j]] = [cardSubset[j], cardSubset[i]];
+            }
+            const chosen6 = cardSubset.slice(0, 6);
+
+            matchCardsArray = [];
+            
+            chosen6.forEach((card, idx) => {
+                matchCardsArray.push({
+                    uniqueId: `card-${card.id}-dots`,
+                    parentCardId: card.id,
+                    countValue: card.count,
+                    type: 'dots',
+                    displayHtml: drawCardSvg(card.id),
+                    isMatched: false,
+                    isFlipped: false
+                });
+
+                if (mode === 'dots-to-digits') {
+                    matchCardsArray.push({
+                        uniqueId: `card-${card.id}-digit`,
+                        parentCardId: card.id,
+                        countValue: card.count,
+                        type: 'digit',
+                        displayHtml: `
+                            <div class="w-full h-full bg-white flex flex-col items-center justify-center p-4 border border-slate-100 rounded-2xl">
+                                <span class="text-6xl font-extrabold text-indigo-600 font-child animate-pulse">${card.count}</span>
+                                <span class="text-[10px] uppercase font-bold text-slate-400 mt-2 tracking-wider">${card.count === 1 ? 'single item' : 'items'}</span>
+                            </div>
+                        `,
+                        isMatched: false,
+                        isFlipped: false
+                    });
+                } else {
+                    matchCardsArray.push({
+                        uniqueId: `card-${card.id}-dots-clone`,
+                        parentCardId: card.id,
+                        countValue: card.count,
+                        type: 'dots',
+                        displayHtml: drawCardSvg(card.id),
+                        isMatched: false,
+                        isFlipped: false
+                    });
+                }
+            });
+
+            for (let i = matchCardsArray.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [matchCardsArray[i], matchCardsArray[j]] = [matchCardsArray[j], matchCardsArray[i]];
+            }
+
+            matchMoves = 0;
+            matchPairsFound = 0;
+            firstCardSelected = null;
+            secondCardSelected = null;
+            lockGameInput = false;
+            
+            document.getElementById('match-moves-count').innerText = matchMoves;
+            document.getElementById('match-pairs-count').innerText = `${matchPairsFound} / 6`;
+            document.getElementById('match-victory-banner').className = "hidden text-xs font-extrabold text-green-700 uppercase tracking-wider animate-pulse";
+            
+            buildMatchBoardMarkup();
+
+            if (matchGameTimer) clearInterval(matchGameTimer);
+            matchStartTime = Date.now();
+            document.getElementById('match-play-timer').innerText = "00:00";
+            matchGameTimer = setInterval(updateMatchTimer, 1000);
+        }
+
+        function updateMatchTimer() {
+            const delta = Math.floor((Date.now() - matchStartTime) / 1000);
+            const mins = String(Math.floor(delta / 60)).padStart(2, '0');
+            const secs = String(delta % 60).padStart(2, '0');
+            document.getElementById('match-play-timer').innerText = `${mins}:${secs}`;
+        }
+
+        function buildMatchBoardMarkup() {
+            const board = document.getElementById('match-board');
+            board.innerHTML = '';
+
+            matchCardsArray.forEach((item, index) => {
+                const cardOuter = document.createElement('div');
+                cardOuter.className = "aspect-[2/3] w-full perspective cursor-pointer min-h-[48px]";
+                cardOuter.setAttribute('onclick', `handleMatchCardClick(${index})`);
+                
+                const inner = document.createElement('div');
+                inner.id = `match-inner-${index}`;
+                inner.className = "w-full h-full relative preserve-3d transition-transform duration-300 rounded-2xl shadow-sm border border-slate-200 bg-white";
+
+                const back = document.createElement('div');
+                back.className = "absolute inset-0 backface-hidden w-full h-full bg-indigo-600 rounded-2xl flex flex-col justify-center items-center text-white border-4 border-white shadow-inner";
+                back.innerHTML = `
+                    <div class="h-12 w-12 bg-white/25 rounded-full flex items-center justify-center">
+                        <i class="fa-solid fa-graduation-cap text-lg text-white"></i>
+                    </div>
+                `;
+
+                const front = document.createElement('div');
+                front.className = "absolute inset-0 backface-hidden w-full h-full rotate-y-180 bg-white rounded-2xl overflow-hidden p-1.5 flex items-center justify-center";
+                front.innerHTML = item.displayHtml;
+
+                inner.appendChild(back);
+                inner.appendChild(front);
+                cardOuter.appendChild(inner);
+                board.appendChild(cardOuter);
+            });
+        }
+
+        function handleMatchCardClick(index) {
+            const cardObj = matchCardsArray[index];
+            if (lockGameInput || cardObj.isMatched || cardObj.isFlipped) return;
+
+            const innerElement = document.getElementById(`match-inner-${index}`);
+            innerElement.classList.add('rotate-y-180');
+            cardObj.isFlipped = true;
+
+            if (!firstCardSelected) {
+                firstCardSelected = { index, ...cardObj };
+            } else {
+                secondCardSelected = { index, ...cardObj };
+                lockGameInput = true;
+                
+                matchMoves++;
+                document.getElementById('match-moves-count').innerText = matchMoves;
+
+                if (firstCardSelected.countValue === secondCardSelected.countValue && firstCardSelected.uniqueId !== secondCardSelected.uniqueId) {
+                    setTimeout(() => {
+                        matchCardsArray[firstCardSelected.index].isMatched = true;
+                        matchCardsArray[secondCardSelected.index].isMatched = true;
+                        
+                        document.getElementById(`match-inner-${firstCardSelected.index}`).className += " border-4 border-green-400 opacity-60";
+                        document.getElementById(`match-inner-${secondCardSelected.index}`).className += " border-4 border-green-400 opacity-60";
+
+                        matchPairsFound++;
+                        document.getElementById('match-pairs-count').innerText = `${matchPairsFound} / 6`;
+
+                        firstCardSelected = null;
+                        secondCardSelected = null;
+                        lockGameInput = false;
+
+                        if (matchPairsFound === 6) {
+                            clearInterval(matchGameTimer);
+                            document.getElementById('match-victory-banner').className = "text-xs font-extrabold text-green-700 uppercase tracking-wider animate-bounce block";
+                        }
+                    }, 500);
+                } else {
+                    setTimeout(() => {
+                        const elA = document.getElementById(`match-inner-${firstCardSelected.index}`);
+                        const elB = document.getElementById(`match-inner-${secondCardSelected.index}`);
+                        
+                        elA.classList.remove('rotate-y-180');
+                        elB.classList.remove('rotate-y-180');
+                        
+                        matchCardsArray[firstCardSelected.index].isFlipped = false;
+                        matchCardsArray[secondCardSelected.index].isFlipped = false;
+
+                        firstCardSelected = null;
+                        secondCardSelected = null;
+                        lockGameInput = false;
+                    }, 1200);
+                }
+            }
+        }
+
+        function triggerPrint() {
+            const printLayoutVal = parseInt(document.getElementById('print-layout-select').value);
+            const printableArea = document.getElementById('printable-area');
+            
+            printableArea.innerHTML = '';
+            let cardsPerPage = printLayoutVal;
+            
+            let currentPageDiv = null;
+            let currentGridDiv = null;
+
+            CARDS_DATA.forEach((card, index) => {
+                if (index % cardsPerPage === 0) {
+                    currentPageDiv = document.createElement('div');
+                    currentPageDiv.className = "print-page bg-white text-black p-12 min-h-screen";
+                    
+                    const pHeader = document.createElement('div');
+                    pHeader.className = "border-b-2 border-slate-800 pb-2 mb-6 flex justify-between items-end no-print-visible";
+                    pHeader.innerHTML = `
+                        <div>
+                            <span class="text-xs uppercase tracking-widest font-bold text-slate-500">Curriculum Teaching Materials</span>
+                            <h2 class="text-base font-bold text-slate-900 mt-0.5">Math Dot Flashcard Set (Page ${Math.floor(index/cardsPerPage) + 1})</h2>
+                        </div>
+                        <div class="text-right">
+                            <span class="text-[10px] text-slate-400">Total Cards: 12</span>
+                        </div>
+                    `;
+                    currentPageDiv.appendChild(pHeader);
+
+                    currentGridDiv = document.createElement('div');
+                    currentGridDiv.className = "grid gap-6";
+                    
+                    if (cardsPerPage === 4) {
+                        currentGridDiv.className += " grid-cols-2 p-4";
+                    } else if (cardsPerPage === 6) {
+                        currentGridDiv.className += " grid-cols-2 md:grid-cols-3 p-2";
+                    } else {
+                        currentGridDiv.className += " grid-cols-3 sm:grid-cols-4 gap-4 p-2";
+                    }
+                    
+                    currentPageDiv.appendChild(currentGridDiv);
+                    printableArea.appendChild(currentPageDiv);
+                }
+
+                const printCard = document.createElement('div');
+                printCard.className = "print-card bg-white p-4 border border-slate-300 rounded-3xl flex flex-col justify-between aspect-[2/3] shadow-none break-inside-avoid page-break-inside-avoid";
+                
+                let cardSizeStyle = "w-full";
+                printCard.className += ` ${cardSizeStyle}`;
+
+                const svgContainer = document.createElement('div');
+                svgContainer.className = "flex-grow flex items-center justify-center p-2";
+                svgContainer.innerHTML = drawCardSvg(card.id, true);
+
+                const printMeta = document.createElement('div');
+                printMeta.className = "text-center mt-3 border-t border-dashed border-slate-200 pt-2 flex justify-between items-center px-1";
+                printMeta.innerHTML = `
+                    <span class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Card ${card.id}</span>
+                    <span class="text-[11px] font-bold text-slate-700 font-child">${card.label}</span>
+                `;
+
+                printCard.appendChild(svgContainer);
+                printCard.appendChild(printMeta);
+                currentGridDiv.appendChild(printCard);
+            });
+
+            window.print();
+        }
+
+        window.onload = function() {
+            renderAllTabViews();
+            
+            document.addEventListener('keydown', function(event) {
+                if (activeTab === 'slideshow') {
+                    if (event.key === 'ArrowRight' || event.key === ' ') {
+                        event.preventDefault();
+                        nextSlide();
+                    } else if (event.key === 'ArrowLeft') {
+                        event.preventDefault();
+                        prevSlide();
+                    } else if (event.key === 'Enter') {
+                        event.preventDefault();
+                        revealSlideshowAnswer();
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
